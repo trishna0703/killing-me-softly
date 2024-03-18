@@ -19,3 +19,37 @@
     right: 50%;
     width: 40px;
 }
+
+@keyframes moveLeftToRight {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(calc(100vw - 100px));
+
+    }
+}
+
+@keyframes moveRightToLeft {
+    0% {
+        transform: translateX(0vw);
+    }
+
+    100% {
+        transform: translateX(-95vw);
+    }
+}
+
+.playerOneFiring {
+    position: absolute;
+    left: 0;
+    animation: moveLeftToRight 2s linear 1;
+}
+
+.playerTwoFiring {
+    position: absolute;
+    left: 0;
+    animation: moveRightToLeft 2s linear 1;
+
+}
