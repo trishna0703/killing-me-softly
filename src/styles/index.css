@@ -1,0 +1,21 @@
+.gameGrid {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3%;
+}
+
+.playerPositionsHorizontal {
+    width: 40px;
+    height: 100%;
+    border-left: 3px solid #fff;
+    position: relative;
+}
+
+.players {
+    position: absolute;
+    right: 50%;
+    width: 40px;
+}
