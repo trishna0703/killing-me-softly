@@ -1,10 +1,19 @@
 .gameGrid {
-    width: 100vw;
-    height: 100vh;
+    width: 1000px;
+    height: 500px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 3%;
+    background-color: lightsalmon;
+    position: relative;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
 
 .playerPositionsHorizontal {
@@ -52,4 +61,50 @@
     left: 0;
     animation: moveRightToLeft 2s linear 1;
 
+}
+
+@keyframes explode {
+    0% {
+        background-image: url('/exp1.jpg');
+    }
+
+    15% {
+        background-image: url('/exp2.jpg');
+    }
+
+    30% {
+        background-image: url('/exp3.jpg');
+    }
+
+    45% {
+        background-image: url('/exp4.jpg');
+    }
+
+    60% {
+        background-image: url('/exp5.jpg');
+    }
+
+    75% {
+        background-image: url('/exp6.jpg');
+    }
+
+    90% {
+        background-image: url('/exp7.jpg');
+    }
+
+    100% {
+        background-image: none;
+    }
+
+
+}
+
+.explosionImg {
+    background-image: url('/exp1.jpg');
+    background-size: contain;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    transition: all .1s ease;
+    animation: explode 1s 1;
 }

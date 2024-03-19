@@ -1,33 +1,21 @@
+import { setPositions } from "@/redux/feature/positions";
+import { useAppDispatch } from "@/redux/hooks";
 import { BulletPosition } from "@/utils/constants";
 import Image from "next/image";
 import React, { forwardRef, useEffect, useState } from "react";
 
-const Bullets = ({
-  pos,
-  firingMotion,
-  forwardedRef,
-  setIsFired,
-}: {
-  pos: BulletPosition;
-  firingMotion: string;
-  forwardedRef: any;
-  setIsFired: () => void;
-}) => {
-  useEffect(() => {
-    window.addEventListener("animationend", setIsFired);
-
-    return () => {
-      window.removeEventListener("animationend", setIsFired);
-    };
-  }, [forwardedRef, setIsFired]);
-
+const Bullets = ({ pos }: { pos: BulletPosition }) => {
   return (
     <div
-      style={{ position: "absolute", top: pos.y }}
-      className={firingMotion}
-      ref={forwardedRef}
+      style={{
+        position: "absolute",
+        top: `${pos.y}px`,
+        left: `${pos.x}px`,
+        width: "40px",
+        transition: "all .1s ease",
+      }}
     >
-      <Image src={"/bullet.jpg"} alt="player1" width={40} height={40} />
+      <Image src={"/bullet.jpg"} alt="bullet" width={40} height={40} />
     </div>
   );
 };
