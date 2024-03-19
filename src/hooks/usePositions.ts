@@ -87,7 +87,7 @@ const usePositions = () => {
       if (newLeft <= 40) {
         breakInterval(bulletTimer1);
       }
-    }, 100);
+    }, 25);
   };
   const handleBulletTraversingRight = () => {
     let bulletPos1 = bullet1.x || 40;
@@ -105,7 +105,7 @@ const usePositions = () => {
       if (newLeft >= 960) {
         breakInterval(bulletTimer2);
       }
-    }, 100);
+    }, 25);
   };
   const isPlayerInBulletRange = (player: any, bullet: any) => {
     // Calculate the range around the bullet
