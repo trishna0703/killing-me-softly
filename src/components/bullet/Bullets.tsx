@@ -4,7 +4,13 @@ import { BulletPosition } from "@/utils/constants";
 import Image from "next/image";
 import React, { forwardRef, useEffect, useState } from "react";
 
-const Bullets = ({ pos }: { pos: BulletPosition }) => {
+const Bullets = ({
+  pos,
+  transform,
+}: {
+  pos: BulletPosition;
+  transform?: string;
+}) => {
   return (
     <div
       style={{
@@ -13,9 +19,10 @@ const Bullets = ({ pos }: { pos: BulletPosition }) => {
         left: `${pos.x}px`,
         width: "40px",
         transition: "all .1s ease",
+        transform: transform,
       }}
     >
-      <Image src={"/bullet.jpg"} alt="bullet" width={40} height={40} />
+      <Image src={"/bullet.png"} alt="bullet" width={40} height={40} />
     </div>
   );
 };

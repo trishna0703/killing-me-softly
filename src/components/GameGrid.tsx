@@ -10,10 +10,23 @@ import { BulletPosition } from "@/utils/constants";
 import Bullets from "./bullet/Bullets";
 import usePositions from "@/hooks/usePositions";
 import explosion from "../../public/explosion.jpg";
-const GameGrid = () => {
+import Welcome from "./welcome/Welcome";
+const GameGrid = ({
+  playerKilled,
+  showExplosion,
+  setShowWinner,
+  setShowExplosion,
+  setPlayerKilled,
+}: {
+  playerKilled: any;
+  showExplosion: any;
+  setShowWinner: (value: string) => void;
+  setShowExplosion: (value: any) => void;
+  setPlayerKilled: (value: any) => void;
+}) => {
   const { isColliding, trackMovements } = usePositions();
-  const dispatch = useAppDispatch();
-  const [showWinner, setShowWinner] = useState("");
+  const [startGame, setStartGame] = useState(false);
+
   // const collisions = useCollision();
   const bullet1Position = useAppSelector(
     (state) => state.positionReducer.bullet1
@@ -27,28 +40,12 @@ const GameGrid = () => {
   const player2Position = useAppSelector(
     (state) => state.positionReducer.player2
   );
-  const [playerKilled, setPlayerKilled] = useState({
-    player1: false,
-    player2: false,
-  });
-
-  const [showExplosion, setShowExplosion] = useState<
-    BulletPosition & { show: boolean }
-  >({
-    x: 0,
-    y: 0,
-    show: false,
-  });
-
-  const handleRestart = () => {
-    setShowWinner("");
-    setShowExplosion({ show: false, x: 0, y: 0 });
-    setPlayerKilled({ player1: false, player2: false });
-  };
 
   useEffect(() => {
     const handleKeyPress = (event: any) => {
-      trackMovements(event.key);
+      if (startGame) {
+        trackMovements(event.key);
+      }
     };
 
     window.addEventListener("keyup", handleKeyPress);
@@ -58,51 +55,21 @@ const GameGrid = () => {
     };
   });
 
-  function areElementsWithinRadius() {
-    const rect1 = bullet1Position.x || 0;
-    const rect2 = bullet2Position.x || 0;
-    const radius1 = 20; // Assuming circular elements, get radius from width
-    const radius2 = 20;
-
-    // Calculate the center coordinates of each element
-    const centerX1 = rect1 + radius1;
-    const centerY1 = bullet1Position.y || 0 + radius1;
-    const centerX2 = rect2 + radius2;
-    const centerY2 = bullet2Position.y || 0 + radius2;
-
-    // Calculate the distance between the centers of the elements
-    const distance = Math.sqrt(
-      Math.pow(centerX2 - centerX1, 2) + Math.pow(centerY2 - centerY1, 2)
-    );
-
-    // Compare the distance with the sum of their radii
-    const sumOfRadii = radius1;
-
-    return distance <= sumOfRadii;
-  }
   useEffect(() => {
     if (isColliding.bulletsCollided) {
-      let x = bullet1Position.x;
-      let y = bullet1Position.y;
-      let areColliding = areElementsWithinRadius();
-      if (areColliding) {
-        setShowExplosion({
-          show: true,
-          x: x,
-          y: y,
-        });
-      }
+      setShowExplosion({
+        show: true,
+        x: isColliding.bulletCoordinates.x,
+        y: isColliding.bulletCoordinates.y,
+      });
     }
-  }, [isColliding.bulletsCollided, bullet1Position.x]);
+  }, [isColliding.bulletsCollided]);
 
   useEffect(() => {
-    if (
-      !bullet1Position.x &&
-      !bullet2Position.x &&
-      !isColliding.player1Hit &&
-      !isColliding.player2Hit
-    ) {
-      setShowExplosion({ show: false, x: 0, y: 0 });
+    if (bullet1Position.x == undefined && bullet2Position.x == undefined) {
+      setTimeout(() => {
+        setShowExplosion({ show: false, x: 0, y: 0 });
+      }, 2000);
     }
   }, [bullet1Position.x, bullet2Position.x]);
 
@@ -110,8 +77,8 @@ const GameGrid = () => {
     if (isColliding.player1Hit) {
       setShowExplosion({
         show: true,
-        x: player1Position.x,
-        y: player1Position.y,
+        x: player1Position.x - 50,
+        y: player1Position.y - 50,
       });
       setPlayerKilled({ ...playerKilled, player1: true });
       setTimeout(() => {
@@ -121,8 +88,8 @@ const GameGrid = () => {
     if (isColliding.player2Hit) {
       setShowExplosion({
         show: true,
-        x: player2Position.x,
-        y: player2Position.y,
+        x: player2Position.x - 50,
+        y: player2Position.y - 50,
       });
       setPlayerKilled({ ...playerKilled, player2: true });
       setTimeout(() => {
@@ -131,38 +98,38 @@ const GameGrid = () => {
     }
   }, [isColliding.player1Hit, isColliding.player2Hit]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      setStartGame(true);
+    }, 6000);
+  }, []);
+
   return (
     <>
-      {showWinner != "" ? (
-        <div>
-          <div>{showWinner} won this match.</div>
-          <button onClick={handleRestart}>Restart Match</button>
+      {startGame ? null : <Welcome />}
+      <div className="gameGrid">
+        {showExplosion.show ? (
+          <div
+            className="explosionImg"
+            style={{
+              top: `${showExplosion.y}px`,
+              left: `${showExplosion.x}px`,
+            }}
+          ></div>
+        ) : null}
+        <div className="playerPositionsHorizontal leftPlayer">
+          {playerKilled?.player1 ? null : <Player1 />}
         </div>
-      ) : (
-        <div className="gameGrid">
-          {showExplosion.show ? (
-            <div
-              className="explosionImg"
-              style={{
-                top: `${showExplosion.y}px`,
-                left: `${showExplosion.x}px`,
-              }}
-            ></div>
-          ) : null}
-          <div className="playerPositionsHorizontal ">
-            {playerKilled?.player1 ? null : <Player1 />}
-          </div>
-          <div className="playerPositionsHorizontal ">
-            {playerKilled?.player2 ? null : <Player2 />}
-          </div>
-          {bullet1Position.y != undefined && !showExplosion.show ? (
-            <Bullets pos={bullet1Position} />
-          ) : null}
-          {bullet2Position.y != undefined && !showExplosion.show ? (
-            <Bullets pos={bullet2Position} />
-          ) : null}
+        <div className="playerPositionsHorizontal rightPlayer ">
+          {playerKilled?.player2 ? null : <Player2 />}
         </div>
-      )}
+        {bullet1Position.y != undefined && !showExplosion.show ? (
+          <Bullets pos={bullet1Position} />
+        ) : null}
+        {bullet2Position.y != undefined && !showExplosion.show ? (
+          <Bullets pos={bullet2Position} transform={"rotate(180deg)"} />
+        ) : null}
+      </div>
     </>
   );
 };

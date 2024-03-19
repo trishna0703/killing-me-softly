@@ -4,7 +4,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 3%;
+    padding: 0 4%;
     background-color: lightsalmon;
     position: relative;
 }
@@ -19,13 +19,28 @@ body {
 .playerPositionsHorizontal {
     width: 40px;
     height: 100%;
-    border-left: 3px solid #fff;
     position: relative;
+}
+
+.leftPlayer {
+    border-left: 3px solid #fff;
+
+    .players {
+        right: 50%;
+    }
+}
+
+.rightPlayer {
+    border-right: 3px solid #fff;
+
+    .players {
+        left: 50%;
+    }
 }
 
 .players {
     position: absolute;
-    right: 50%;
+    transition: all 0.3s ease;
     width: 40px;
 }
 
@@ -65,31 +80,31 @@ body {
 
 @keyframes explode {
     0% {
-        background-image: url('/exp1.jpg');
+        background-image: url('/exp1.png');
     }
 
     15% {
-        background-image: url('/exp2.jpg');
+        background-image: url('/exp2.png');
     }
 
     30% {
-        background-image: url('/exp3.jpg');
+        background-image: url('/exp3.png');
     }
 
     45% {
-        background-image: url('/exp4.jpg');
+        background-image: url('/exp4.png');
     }
 
     60% {
-        background-image: url('/exp5.jpg');
+        background-image: url('/exp5.png');
     }
 
     75% {
-        background-image: url('/exp6.jpg');
+        background-image: url('/exp6.png');
     }
 
     90% {
-        background-image: url('/exp7.jpg');
+        background-image: url('/exp7.png');
     }
 
     100% {
@@ -100,11 +115,109 @@ body {
 }
 
 .explosionImg {
-    background-image: url('/exp1.jpg');
+    background-image: url('/exp1.png');
     background-size: contain;
     position: absolute;
-    width: 40px;
-    height: 40px;
+    width: 100px;
+    height: 100px;
     transition: all .1s ease;
-    animation: explode 1s 1;
+    animation: explode 1s infinite;
+    z-index: 9;
+}
+
+.resetScreen {
+    background-color: green;
+    color: #fff;
+    text-align: center;
+    font-family: DM Sans, sans-serif;
+    padding: 20px;
+    border-radius: 8px;
+
+    img {
+        width: 50%;
+        margin: auto;
+    }
+
+    h3 {
+        font-size: 20px;
+        font-weight: 600;
+        padding: 10px;
+    }
+
+    p {
+        font-size: 18px;
+        padding-bottom: 20px;
+    }
+
+    button {
+        background-color: rgb(216, 184, 2);
+        color: #000;
+        border: 1px solid #000;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 1px 1px 15px 1px #474646;
+
+        &:hover {
+            background-color: rgb(206, 172, 2);
+        }
+    }
+}
+
+@keyframes welcome {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes countDown {
+    0% {
+        opacity: 1;
+    }
+
+    25% {
+        opacity: 0;
+
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.welcomeMsg {
+    animation: welcome 6s 1;
+    opacity: 0;
+}
+
+.countdown {
+    transition: opacity 1s ease;
+    animation: countDown 3s 1;
+    opacity: 0;
+}
+
+
+.welcomeWrapper {
+    text-align: center;
+    font-size: 30px;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    z-index: 9;
+    transform: translate(-50%, -50%);
 }
