@@ -9,8 +9,8 @@ type InitialState = {
 };
 
 const initialState = {
-  player1: { x: 0, y: 200 },
-  player2: { x: 0, y: 200 },
+  player1: { x: 20, y: 200 },
+  player2: { x: 1400, y: 200 },
   bullet1: { x: 0, y: undefined },
   bullet2: { x: 0, y: undefined },
 } as InitialState;

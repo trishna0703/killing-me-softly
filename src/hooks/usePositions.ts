@@ -89,10 +89,10 @@ const usePositions = () => {
         })
       );
 
-      if (newLeft <= 20) {
+      if (newLeft <= 0) {
         breakInterval(bulletTimer1);
       }
-    }, 25);
+    }, 10);
   };
 
   const handleBulletTraversingRight = () => {
@@ -108,10 +108,10 @@ const usePositions = () => {
         })
       );
 
-      if (newLeft >= xPos + 50) {
+      if (newLeft >= window.innerWidth) {
         breakInterval(bulletTimer2);
       }
-    }, 25);
+    }, 10);
   };
 
   const isPlayerInBulletRange = (player: any, bullet: any) => {

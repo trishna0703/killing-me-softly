@@ -15,7 +15,7 @@ const Bullets = ({
         position: "absolute",
         top: `${pos.y}px`,
         left: `${pos.x}px`,
-        width: "40px",
+        width: "50px",
         transition: "all .1s ease",
         transform: transform,
       }}
