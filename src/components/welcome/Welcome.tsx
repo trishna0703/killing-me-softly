@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 
 const Welcome = () => {
   const [countDown, setCountDown] = useState(3);
-  const [fade, setFade] = useState(false);
 
   useEffect(() => {
     const countdownInterval = setInterval(() => {
@@ -21,7 +20,6 @@ const Welcome = () => {
     };
   }, [countDown]);
 
-  console.log({ countDown, fade });
   return (
     <div className="welcomeWrapper">
       <div className="welcomeMsg">

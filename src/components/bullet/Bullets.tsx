@@ -1,8 +1,6 @@
-import { setPositions } from "@/redux/feature/positions";
-import { useAppDispatch } from "@/redux/hooks";
 import { BulletPosition } from "@/utils/constants";
 import Image from "next/image";
-import React, { forwardRef, useEffect, useState } from "react";
+import React from "react";
 
 const Bullets = ({
   pos,
@@ -22,7 +20,7 @@ const Bullets = ({
         transform: transform,
       }}
     >
-      <Image src={"/bullet1.png"} alt="bullet" width={40} height={40} />
+      <Image src={"/bullet-final.png"} alt="bullet" width={40} height={40} />
     </div>
   );
 };

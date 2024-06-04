@@ -1,16 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Player1 from "./players/Player1";
 import Player2 from "./players/Player2";
-import { useGameContext } from "@/GameContext";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setPositions } from "@/redux/feature/positions";
-import useCollision from "@/hooks/useCollision";
-import Image from "next/image";
-import { BulletPosition } from "@/utils/constants";
+import {  useAppSelector } from "@/redux/hooks";
 import Bullets from "./bullet/Bullets";
 import usePositions from "@/hooks/usePositions";
-import explosion from "../../public/explosion.jpg";
 import Welcome from "./welcome/Welcome";
+
+
 const GameGrid = ({
   playerKilled,
   showExplosion,
@@ -27,7 +23,6 @@ const GameGrid = ({
   const { isColliding, trackMovements } = usePositions();
   const [startGame, setStartGame] = useState(false);
 
-  // const collisions = useCollision();
   const bullet1Position = useAppSelector(
     (state) => state.positionReducer.bullet1
   );
@@ -87,27 +82,17 @@ const GameGrid = ({
     }
   }, [isColliding]);
 
-  // useEffect(() => {
-  //   if (bullet1Position.x == undefined && bullet2Position.x == undefined) {
-  //     setTimeout(() => {
-  //       setShowExplosion({ show: false, x: 0, y: 0 });
-  //     }, 2000);
-  //   }
-  // }, [bullet1Position.x, bullet2Position.x]);
-
-  // useEffect(() => {}, [isColliding.player1Hit, isColliding.player2Hit]);
 
   useEffect(() => {
     setTimeout(() => {
       setStartGame(true);
-    }, 6000);
+    }, 3000);
   }, []);
 
   return (
     <>
       {startGame ? null : <Welcome />}
       <div className="gameGrid">
-        {/* <div className="gri40"></div> */}
         {showExplosion.show ? (
           <div
             className="explosionImg"
@@ -124,10 +109,10 @@ const GameGrid = ({
           {playerKilled?.player2 ? null : <Player2 />}
         </div>
         {bullet1Position.y != undefined && !showExplosion.show ? (
-          <Bullets pos={bullet1Position} />
+          <Bullets pos={bullet1Position} transform={"scaleX(-1)"} />
         ) : null}
         {bullet2Position.y != undefined && !showExplosion.show ? (
-          <Bullets pos={bullet2Position} transform={"rotate(180deg)"} />
+          <Bullets pos={bullet2Position} />
         ) : null}
       </div>
     </>

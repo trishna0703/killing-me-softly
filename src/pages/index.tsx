@@ -1,7 +1,4 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import Player1 from "@/components/players/Player1";
-import Player2 from "@/components/players/Player2";
 import GameGrid from "@/components/GameGrid";
 import { useState } from "react";
 import usePositions from "@/hooks/usePositions";
@@ -35,10 +32,12 @@ export default function Home() {
     <>
       {showWinner ? (
         <div className="resetScreen">
-          <img src="/winner.png" alt="winner" />
-          <h3>Congratulations {showWinner}!</h3>
-          <p>You won this match.</p>
-          <button onClick={handleRestart}>Restart Match</button>
+          <div className="resetScreenWrapper">
+            <img src="/winner.png" alt="winner" />
+            <h3>Congratulations {showWinner}!</h3>
+            <p>You won this match.</p>
+            <button onClick={handleRestart}>Restart Match</button>
+          </div>
         </div>
       ) : (
         <GameGrid

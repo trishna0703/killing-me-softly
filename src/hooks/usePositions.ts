@@ -3,9 +3,11 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { fireKeys, playerMovementKeys, speed } from "@/utils/constants";
 import React, { useEffect, useState } from "react";
 
-var bulletTimer1: NodeJS.Timeout;
-var bulletTimer2: NodeJS.Timeout;
+let bulletTimer1: NodeJS.Timeout;
+let bulletTimer2: NodeJS.Timeout;
+
 const usePositions = () => {
+  const [xPos, setXPos] = useState(0);
   const dispatch = useAppDispatch();
   const player1 = useAppSelector((state) => state.positionReducer.player1);
   const player2 = useAppSelector((state) => state.positionReducer.player2);
@@ -18,8 +20,11 @@ const usePositions = () => {
     bulletCoordinates: { x: 0, y: 0 },
   });
 
+  useEffect(() => {
+    setXPos(window.innerWidth - 100);
+  }, []);
+
   const handlePlayerMovement = (key: string) => {
-    console.log("called  ", key);
     if (key == "s") {
       if (player1.y <= 200 + 20 * 12) {
         dispatch(
@@ -49,23 +54,19 @@ const usePositions = () => {
 
   const handleFiring = (key: string) => {
     if (key == "d") {
-      // console.log("player 1 position ", player1);
       if (!bullet1.y) {
-        console.log("fire bullet 1");
-        dispatch(setPositions({ bullet1: { y: player1.y, x: 40 } }));
+        dispatch(setPositions({ bullet1: { y: player1.y, x: 70 } }));
         handleBulletTraversingRight();
       }
     } else if (key == "ArrowLeft") {
       if (!bullet2.y) {
-        console.log("fire bullet 2");
-        dispatch(setPositions({ bullet2: { y: player2.y, x: 920 } }));
+        dispatch(setPositions({ bullet2: { y: player2.y, x: xPos } }));
         handleBulletTraversingLeft();
       }
     }
   };
 
   const breakInterval = (timer: NodeJS.Timeout) => {
-    console.log("break interval");
     clearInterval(timer);
     dispatch(
       setPositions({
@@ -76,7 +77,7 @@ const usePositions = () => {
   };
 
   const handleBulletTraversingLeft = () => {
-    let bulletPos = bullet2.x || 920;
+    let bulletPos = bullet2.x ?? xPos;
     bulletTimer1 = setInterval((): any => {
       let newLeft = 0;
 
@@ -88,13 +89,14 @@ const usePositions = () => {
         })
       );
 
-      if (newLeft <= 40) {
+      if (newLeft <= 20) {
         breakInterval(bulletTimer1);
       }
     }, 25);
   };
+
   const handleBulletTraversingRight = () => {
-    let bulletPos1 = bullet1.x || 40;
+    let bulletPos1 = bullet1.x ?? 40;
     bulletTimer2 = setInterval(() => {
       let newLeft = 0;
 
@@ -106,15 +108,15 @@ const usePositions = () => {
         })
       );
 
-      if (newLeft >= 960) {
+      if (newLeft >= xPos + 50) {
         breakInterval(bulletTimer2);
       }
     }, 25);
   };
+
   const isPlayerInBulletRange = (player: any, bullet: any) => {
     // Calculate the range around the bullet
     let radius = 20;
-    console.log({ player });
     const leftBound = player.x - radius;
     const rightBound = player.x + radius;
     const lowerBound = bullet.y - radius;
@@ -127,28 +129,27 @@ const usePositions = () => {
   };
 
   const areElementsWithinRadius = () => {
-    const rect1 = bullet1.x || 40;
-    const rect2 = bullet2.x || 960;
+    const rect1 = bullet1.x ?? 20;
+    const rect2 = bullet2.x ?? xPos;
     const radius1 = 20;
     const radius2 = 20;
 
     const centerX1 = rect1 + radius1;
-    const centerY1 = bullet1.y || 0 + radius1;
+    const centerY1 = bullet1.y ?? 0 + radius1;
     const centerX2 = rect2 + radius2;
-    const centerY2 = bullet2.y || 0 + radius2;
+    const centerY2 = bullet2.y ?? 0 + radius2;
 
     const distance = Math.sqrt(
       Math.pow(centerX2 - centerX1, 2) + Math.pow(centerY2 - centerY1, 2)
     );
 
     const sumOfRadii = radius1;
-    console.log("distance ", distance, rect1, rect2, distance <= sumOfRadii);
+
     return distance <= sumOfRadii;
   };
 
   const checkIfColliding = () => {
     let updatedStates = {};
-    // console.log("checking hits ", bullet1.y, bullet2.y);
     if (
       bullet1.y != undefined &&
       bullet2.y != undefined &&
@@ -156,12 +157,10 @@ const usePositions = () => {
       bullet2.x != undefined
     ) {
       if (bullet1.y == bullet2.y) {
-        // console.log("step bullets true ");
         let areBulletsColliding = areElementsWithinRadius();
         if (areBulletsColliding) {
           let x = bullet1.x;
           let y = bullet1.y;
-          console.log("detected collision 1 =>", areBulletsColliding, x, y);
           updatedStates = {
             ...updatedStates,
             bulletsCollided: areBulletsColliding,
@@ -170,7 +169,6 @@ const usePositions = () => {
               y: y,
             },
           };
-          // setBreakBulletTraversal(true);
           breakInterval(bulletTimer2);
           breakInterval(bulletTimer1);
           setTimeout(() => {
@@ -198,7 +196,7 @@ const usePositions = () => {
         updatedStates = { ...updatedStates, player2Hit: true };
       }
     }
-    console.log("detected collision step updated states", { updatedStates });
+
     setIsColliding((prevIsColliding) => ({
       ...prevIsColliding,
       ...updatedStates,
@@ -225,8 +223,8 @@ const usePositions = () => {
     });
     dispatch(
       setPositions({
-        player1: { x: 40, y: 200 },
-        player2: { x: 960, y: 200 },
+        player1: { x: 20, y: 200 },
+        player2: { x: xPos, y: 200 },
         bullet1: { x: 0, y: undefined },
         bullet2: { x: 0, y: undefined },
       })

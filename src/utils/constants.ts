@@ -1,5 +1,4 @@
 export const speed = 20;
-// export const height = window.innerHeight;
 
 export type PlayerPositions = {
   y: number;
