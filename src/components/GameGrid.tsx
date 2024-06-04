@@ -62,19 +62,7 @@ const GameGrid = ({
         x: isColliding.bulletCoordinates.x,
         y: isColliding.bulletCoordinates.y,
       });
-    }
-  }, [isColliding.bulletsCollided]);
-
-  useEffect(() => {
-    if (bullet1Position.x == undefined && bullet2Position.x == undefined) {
-      setTimeout(() => {
-        setShowExplosion({ show: false, x: 0, y: 0 });
-      }, 2000);
-    }
-  }, [bullet1Position.x, bullet2Position.x]);
-
-  useEffect(() => {
-    if (isColliding.player1Hit) {
+    } else if (isColliding.player1Hit) {
       setShowExplosion({
         show: true,
         x: player1Position.x - 50,
@@ -84,8 +72,7 @@ const GameGrid = ({
       setTimeout(() => {
         setShowWinner("Player 2");
       }, 2000);
-    }
-    if (isColliding.player2Hit) {
+    } else if (isColliding.player2Hit) {
       setShowExplosion({
         show: true,
         x: player2Position.x - 50,
@@ -95,8 +82,20 @@ const GameGrid = ({
       setTimeout(() => {
         setShowWinner("Player 1");
       }, 2000);
+    } else {
+      setShowExplosion({ show: false, x: 0, y: 0 });
     }
-  }, [isColliding.player1Hit, isColliding.player2Hit]);
+  }, [isColliding]);
+
+  // useEffect(() => {
+  //   if (bullet1Position.x == undefined && bullet2Position.x == undefined) {
+  //     setTimeout(() => {
+  //       setShowExplosion({ show: false, x: 0, y: 0 });
+  //     }, 2000);
+  //   }
+  // }, [bullet1Position.x, bullet2Position.x]);
+
+  // useEffect(() => {}, [isColliding.player1Hit, isColliding.player2Hit]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -108,6 +107,7 @@ const GameGrid = ({
     <>
       {startGame ? null : <Welcome />}
       <div className="gameGrid">
+        {/* <div className="gri40"></div> */}
         {showExplosion.show ? (
           <div
             className="explosionImg"

@@ -22,7 +22,7 @@ const Bullets = ({
         transform: transform,
       }}
     >
-      <Image src={"/bullet.png"} alt="bullet" width={40} height={40} />
+      <Image src={"/bullet1.png"} alt="bullet" width={40} height={40} />
     </div>
   );
 };

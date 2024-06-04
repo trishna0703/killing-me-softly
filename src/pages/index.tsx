@@ -30,6 +30,7 @@ export default function Home() {
     setShowExplosion({ show: false, x: 0, y: 0 });
     setPlayerKilled({ player1: false, player2: false });
   };
+
   return (
     <>
       {showWinner ? (

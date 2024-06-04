@@ -5,8 +5,10 @@
     align-items: center;
     justify-content: space-between;
     padding: 0 4%;
-    background-color: lightsalmon;
+    /* background-color: lightsalmon; */
+    background-image: url('../../public/bg1.avif');
     position: relative;
+    background-size: cover;
 }
 
 body {
@@ -115,15 +117,21 @@ body {
 }
 
 .explosionImg {
-    background-image: url('/exp1.png');
+    background-image: none;
     background-size: contain;
     position: absolute;
     width: 100px;
     height: 100px;
     transition: all .1s ease;
-    animation: explode 1s infinite;
+    animation: explode 1s 1;
     z-index: 9;
 }
+
+/* .gri40 {
+    width: 40px;
+    height: 40px;
+    background-color: yellow;
+} */
 
 .resetScreen {
     background-color: green;
@@ -216,6 +224,7 @@ body {
     text-align: center;
     font-size: 30px;
     position: absolute;
+    color: #000;
     top: 30%;
     left: 50%;
     z-index: 9;

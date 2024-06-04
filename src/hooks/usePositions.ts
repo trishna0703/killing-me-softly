@@ -50,13 +50,17 @@ const usePositions = () => {
   const handleFiring = (key: string) => {
     if (key == "d") {
       // console.log("player 1 position ", player1);
-      console.log("fire bullet 1");
-      dispatch(setPositions({ bullet1: { y: player1.y, x: 40 } }));
-      handleBulletTraversingRight();
+      if (!bullet1.y) {
+        console.log("fire bullet 1");
+        dispatch(setPositions({ bullet1: { y: player1.y, x: 40 } }));
+        handleBulletTraversingRight();
+      }
     } else if (key == "ArrowLeft") {
-      console.log("fire bullet 2");
-      dispatch(setPositions({ bullet2: { y: player2.y, x: 920 } }));
-      handleBulletTraversingLeft();
+      if (!bullet2.y) {
+        console.log("fire bullet 2");
+        dispatch(setPositions({ bullet2: { y: player2.y, x: 920 } }));
+        handleBulletTraversingLeft();
+      }
     }
   };
 
@@ -119,13 +123,6 @@ const usePositions = () => {
     const isBulletInHitRange = bullet.x >= leftBound && bullet.x <= rightBound;
     const isPlayerInHitRange = player.y >= lowerBound && player.y <= upperBound;
 
-    console.log({
-      isBulletInHitRange,
-      isPlayerInHitRange,
-      leftBound,
-      rightBound,
-    });
-    // Check if player.y falls within the range
     return isBulletInHitRange && isPlayerInHitRange;
   };
 
@@ -188,18 +185,16 @@ const usePositions = () => {
     }
 
     if (bullet2.y != undefined) {
-      // console.log("player 1 hit check");
       let isPlayerHit = isPlayerInBulletRange(player1, bullet2);
-      // console.log({ isPlayerHit }, "player 1");
       if (isPlayerHit) {
+        breakInterval(bulletTimer1);
         updatedStates = { ...updatedStates, player1Hit: true };
       }
     }
     if (bullet1.y != undefined) {
-      // console.log("player 2 hit check");
       let isPlayerHit = isPlayerInBulletRange(player2, bullet1);
-      // console.log({ isPlayerHit }, "player 2");
       if (isPlayerHit) {
+        breakInterval(bulletTimer2);
         updatedStates = { ...updatedStates, player2Hit: true };
       }
     }
@@ -230,10 +225,10 @@ const usePositions = () => {
     });
     dispatch(
       setPositions({
-        bullet1: { x: undefined, y: undefined },
-        bullet2: { x: undefined, y: undefined },
-        player1: { x: 40, y: 230 },
-        player2: { x: 960, y: 230 },
+        player1: { x: 40, y: 200 },
+        player2: { x: 960, y: 200 },
+        bullet1: { x: 0, y: undefined },
+        bullet2: { x: 0, y: undefined },
       })
     );
   };
